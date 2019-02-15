@@ -19,7 +19,7 @@ public class LocacaoServiceTest {
 	
 	
 	@Test
-	public void teste() {
+	public void testeLocacao() throws Exception {
 		//cenario = preparacao 
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Grazi");
@@ -27,6 +27,8 @@ public class LocacaoServiceTest {
 		//ação
 		Locacao locacao = service.alugarFilme(usuario, filme);
 		//verificação
+		
+		
 		
 		
 		//Assert.assertEquals(5.0, locacao.getValor(), 0.01);
@@ -41,6 +43,9 @@ public class LocacaoServiceTest {
 		//Assert.assertThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), CoreMatchers.is(true));
 		//Assert.assertThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), CoreMatchers.is(true));
 		
+		
+		
+		
 		//Usando o Rule 
 		
 		error.checkThat(locacao.getValor(), CoreMatchers.is(CoreMatchers.equalTo(5.0)));
@@ -49,4 +54,18 @@ public class LocacaoServiceTest {
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), CoreMatchers.is(true));
 		 
 	}
+	
+	//tratamento de exceção
+	@Test(expected=Exception.class)  //informando que existe uma exceção esperada
+	public void testLocacao_filmeSemEstoque() throws Exception{
+		//cenario = preparacao 
+		LocacaoService service = new LocacaoService();
+		Usuario usuario = new Usuario("Grazi");
+		Filme filme = new Filme("Filme 1", 0, 5.0);
+		//ação
+		service.alugarFilme(usuario, filme);
+		//verificação
+				
+	}
+	
 }
