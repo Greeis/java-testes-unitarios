@@ -56,6 +56,7 @@ public class LocacaoServiceTest {
 	}
 	
 	//tratamento de exceção
+	
 	@Test(expected=Exception.class)  //informando que existe uma exceção esperada
 	public void testLocacao_filmeSemEstoque() throws Exception{
 		//cenario = preparacao 
@@ -68,4 +69,19 @@ public class LocacaoServiceTest {
 				
 	}
 	
+	@Test  //informando que existe uma exceção esperada
+	public void testLocacao_filmeSemEstoque2(){
+		//cenario = preparacao 
+		LocacaoService service = new LocacaoService();
+		Usuario usuario = new Usuario("Grazi");
+		Filme filme = new Filme("Filme 1", 0, 5.0);
+		//ação
+		try {
+			service.alugarFilme(usuario, filme);
+			Assert.fail("Deveria ter lancado uma excecao");
+		} catch (Exception e) {
+			Assert.assertThat(e.getMessage(), is("Filme sem estoque"));
+		} 
+		//verificação
+	}
 }
