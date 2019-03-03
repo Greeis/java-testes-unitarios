@@ -13,13 +13,13 @@ public class AssertTest {
 		Assert.assertTrue(true);
 		Assert.assertFalse(false);
 		
-		//assertEqual verica se um é igual a outro
-		Assert.assertEquals("Erro de comparação: ", 1,1);
+		//assertEqual verica se um ï¿½ igual a outro
+		Assert.assertEquals("Erro de comparacao: ", 1,1);
 		Assert.assertEquals(0.51234, 0.512 , 0.001);
 		Assert.assertEquals(Math.PI, 3.14, 0.01);
 		
 		
-		//formas de conversão
+		//formas de conversï¿½o
 		int i = 5;
 		Integer i2 = 5;
 		
@@ -27,10 +27,10 @@ public class AssertTest {
 		Assert.assertEquals(i, i2.intValue());
 		
 		
-		//Comparação de string
+		//Comparaï¿½ï¿½o de string
 		
 		Assert.assertEquals("bola", "bola");
-		Assert.assertTrue("bola".equalsIgnoreCase("Bola")); //Não considera o B
+		Assert.assertTrue("bola".equalsIgnoreCase("Bola")); //Nï¿½o considera o B
 		Assert.assertTrue("bola".startsWith("bo")); 
 		
 		
@@ -47,21 +47,14 @@ public class AssertTest {
 		Assert.assertSame(u3, u2);
 		Assert.assertNotSame(u1, u2);
 		
-		//verificar se o obj está null
+		//verificar se o obj estï¿½ null
 		
 		Usuario u4 = null;
-		
 		Assert.assertNull(u4);
 		
-		//verificar que não está vazio
+		//verificar que nao esta vazio
 		
 		Assert.assertNotNull(u1);
-		
-		
-		
-		
-		
-		
 	}
 	
 
