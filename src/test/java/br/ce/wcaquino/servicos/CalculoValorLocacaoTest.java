@@ -1,5 +1,7 @@
 package br.ce.wcaquino.servicos;
 
+import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
+import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static org.hamcrest.CoreMatchers.is;
 
 import java.util.Arrays;
@@ -15,6 +17,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import br.ce.wcaquino.builders.FilmeBuilder;
+import br.ce.wcaquino.builders.UsuarioBuilder;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -44,19 +48,19 @@ public class CalculoValorLocacaoTest {
 	
 	//DDT - Teste guiado a dados
 	
-	private static Filme filme1 = new Filme("Filme 1", 2, 4.0);
-	private static Filme filme2 = new Filme("Filme 2", 2, 4.0);
-	private static Filme filme3 = new Filme("Filme 3", 2, 4.0);
-	private static Filme filme4 = new Filme("Filme 4", 2, 4.0);
-	private static Filme filme5 = new Filme("Filme 5", 2, 4.0);
-	private static Filme filme6 = new Filme("Filme 6", 2, 4.0);
-	private static Filme filme7 = new Filme("Filme 7", 2, 4.0);
+	private static Filme filme1 = umFilme().agora();
+	private static Filme filme2 = umFilme().agora();
+	private static Filme filme3 = umFilme().agora();
+	private static Filme filme4 = umFilme().agora();
+	private static Filme filme5 = umFilme().agora();
+	private static Filme filme6 = umFilme().agora();
+	private static Filme filme7 = umFilme().agora();
 	
 	//definicao do conjunto de dados que sera testado
 	@Parameters (name="{2}")
 	public static Collection<Object[]> getParametros(){
 		return Arrays.asList(new Object[][] {
-			{Arrays.asList(filme1, filme2, filme3), 11.0, "2 filmes: Sem desconto"},
+			{Arrays.asList(filme1, filme2), 8.0, "2 filmes: Sem desconto"},
 			{Arrays.asList(filme1, filme2, filme3), 11.0, "3 filmes: 25%"},
 			{Arrays.asList(filme1, filme2, filme3, filme4), 13.0, "4 filmes: 50%"},
 			{Arrays.asList(filme1, filme2, filme3, filme4, filme5), 14.0, "5 filmes: 75%"},
@@ -68,7 +72,7 @@ public class CalculoValorLocacaoTest {
 	@Test
 	public void deveCalcularLocacaoConsiderandoDescontos() throws LocadoraException, FilmeSemEstoqueException {
 		//cenario
-		Usuario usuario = new Usuario("Graziele");
+		Usuario usuario = umUsuario().agora();
 		//acao
 		Locacao resultado = service.alugarFilme(usuario, filmes);
 		//verificacao

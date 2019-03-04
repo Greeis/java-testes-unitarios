@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.ce.wcaquino.builders.FilmeBuilder;
+import br.ce.wcaquino.builders.UsuarioBuilder;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -58,8 +60,8 @@ public class LocacaoServiceTest {
 		//so executa quando nao for sabado
 		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//cenario = preparacao 
-		Usuario usuario = new Usuario("Grazi");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 1, 5.0));
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().comValor(5.0).agora());
 		
 		//acao
 		Locacao locacao = service.alugarFilme(usuario, filmes);
@@ -94,8 +96,9 @@ public class LocacaoServiceTest {
 	@Test(expected=FilmeSemEstoqueException.class)  //informando que existe uma excecao esperada
 	public void naoDeveAlugarFilmeSemEstoque() throws Exception{
 		//cenario = preparacao 
-		Usuario usuario = new Usuario("Grazi");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 5.0));
+		//Usuario usuario = new Usuario("Grazi");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());
 		//acao
 		service.alugarFilme(usuario, filmes);
 		//verificacao
@@ -133,11 +136,11 @@ public class LocacaoServiceTest {
 //		
 //	}
 	
-	//formA robusta
+	//forma robusta
 	@Test
 	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
 		//preparacao
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 5.0));
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 		//ACAO
 		try {
 			service.alugarFilme(null, filmes);
@@ -153,8 +156,8 @@ public class LocacaoServiceTest {
 	@Test
 	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 		//preparacao
-		Usuario usuario = new Usuario("Grazi");
-		
+//		Usuario usuario = new Usuario("Grazi");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		//Espero...
 		exception.expect(LocadoraException.class);
 		exception.expectMessage("Filme vazio!");
@@ -224,9 +227,9 @@ public class LocacaoServiceTest {
 		 Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//só executa quando for sabado
 		//cenario
-		Usuario usuario = new Usuario("Grazi");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(
-				new Filme("Filme 1", 2, 4.0));
+				FilmeBuilder.umFilme().agora());
 		//acao
 		Locacao resultado = service.alugarFilme(usuario,filmes);
 		//verificacao
