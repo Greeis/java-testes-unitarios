@@ -1,6 +1,9 @@
 package br.ce.wcaquino.servicos;
+
 import junit.framework.TestCase;
 import org.junit.Assert;
+
+import br.ce.wcaquino.servicos.Calculo;
 
 public class CalculoTest extends TestCase {
 	
@@ -9,8 +12,8 @@ public class CalculoTest extends TestCase {
 		float PassaValor1 = 10;
 		float PassaValor2 = 5;
 		float RetornoEsperado = 15;
-		//dispara o método "executaCalculo" da classe "calculo" e armazena
-		//o resultado em uma variável
+		//dispara o mï¿½todo "executaCalculo" da classe "calculo" e armazena
+		//o resultado em uma variï¿½vel
 		
 		float RetornoFeito = Calculo.executaCalculo (PassaValor1, PassaValor2);
 		

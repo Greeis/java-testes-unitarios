@@ -1,4 +1,4 @@
-package br.ce.wcaquino.servicos;
+
 
 import org.junit.*;
 import org.junit.FixMethodOrder;
