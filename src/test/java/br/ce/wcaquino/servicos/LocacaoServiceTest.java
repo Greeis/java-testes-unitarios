@@ -15,8 +15,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
+import br.ce.wcaquino.builders.LocacaoBuilder;
 import br.ce.wcaquino.builders.UsuarioBuilder;
 import br.ce.wcaquino.daos.LocacaoDAO;
 import br.ce.wcaquino.daos.LocacaoDAOFake;
@@ -31,18 +33,26 @@ import buildermaster.BuilderMaster;
 //ORGANIZAR O IMPORT CTRL + SHIFT + O
 public class LocacaoServiceTest {
 	private LocacaoService service;
-	
+	private LocacaoDAOFake dao;
+	private SPCService spc;
+	private EmailService email;
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 	
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 	
+	
 	@Before
 	public void setup() {
 		service = new LocacaoService();
-		LocacaoDAO dao = new LocacaoDAOFake();
+		//LocacaoDAO dao = new LocacaoDAOFake();
+		dao = Mockito.mock(LocacaoDAOFake.class);
 		service.setLocacaoDAO(dao);
+		spc = Mockito.mock(SPCService.class);
+		service.setSPCService(spc);
+		email = Mockito.mock(EmailService.class);
+		service.setEmailService(email);
 	}
 	
 //	@After
@@ -245,7 +255,47 @@ public class LocacaoServiceTest {
 		Assert.assertThat(resultado.getDataRetorno(), MatchersProprios.caiNumaSegunda());
 	}
 	
-	public static void main(String[]args) {
-		new BuilderMaster().gerarCodigoClasse(Locacao.class);
+//	public static void main(String[]args) {
+//		new BuilderMaster().gerarCodigoClasse(Locacao.class);
+//	}
+	
+	@Test
+	public void naoDeveAlugarFilmeParaNegativacaoSPC() throws FilmeSemEstoqueException {
+		//cenario
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+//		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario 2").agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+		//o mockito por padrao ele retorna sempre falso
+		//quando o spc possui nthrows LocadoraException, FilmeSemEstoqueException egativacao for chamado passando como parametro o usuario
+		//entao retorne true
+		Mockito.when(spc.possuiNegativacao(usuario)).thenReturn(true);
+		//acao
+		try {
+			service.alugarFilme(usuario, filmes);
+			//verificacao
+			Assert.fail();
+		} catch (LocadoraException e) {
+			Assert.assertThat(e.getMessage(), is("Usuario negativado!"));
+		}
+		//verificando se o mock foi utilizado com os parametros esperados
+		Mockito.verify(spc).possuiNegativacao(usuario);
+	}
+	
+	@Test
+	public void deveEnviarmockEmailParaLocacaoAtrasadas() {
+		//cenario
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Locacao> locacoes = 
+				Arrays.asList(LocacaoBuilder.umLocacao()
+						.comUsuario(usuario)
+						.comDataRetorno(DataUtils.obterDataComDiferencaDias(-2))
+						.agora());
+		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
+		
+		//acao
+		service.notificarAtrasos();
+		
+		//verificacao
+		Mockito.verify(email).notificarAtraso(usuario);;
 	}
 }

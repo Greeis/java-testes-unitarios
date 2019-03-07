@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.Mockito;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
 import br.ce.wcaquino.builders.UsuarioBuilder;
@@ -48,6 +49,8 @@ public class CalculoValorLocacaoTest {
 		service = new LocacaoService();
 		LocacaoDAO dao = new LocacaoDAOFake();
 		service.setLocacaoDAO(dao);
+		SPCService spc = Mockito.mock(SPCService.class);
+		service.setSPCService(spc);
 	}
 	
 	//DDT - Teste guiado a dados
